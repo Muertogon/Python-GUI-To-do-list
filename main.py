@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from JSONFuncs import *
 
 #create the window
 main = Tk(className="To do list")
@@ -12,10 +13,10 @@ frmTwo = ttk.Frame(main, padding=2, width=200, height=300, borderwidth=2, relief
 frmTwo.pack(side="right", fill="both", expand=True)
 
 #variables
-comboValues = ['Critical','High','Medium','Low']
-chooseText  = ['Please enter the task you want to add', 'Choose the priority', 'Add', 'Reset']
+comboValues     = ['Critical','High','Medium','Low']
+chooseText      = ['Please enter the task you want to add', 'Choose the priority', 'Add', 'Reset']
 dynamic_buttons = []
-entryValue  = StringVar()
+entryValue      = StringVar()
 
 def write_callback(var, index, mode):
   # checks if you can add the task
@@ -25,11 +26,28 @@ def write_callback(var, index, mode):
   else:
     taskCheck.config(state='normal')
 
+def deleteTasks(frame):
+  for task in frame.winfo_children():
+    task.destroy()
+
+def refreshTasks():
+  # updates the frame with tasks
+  deleteTasks(frmTwo)
+
+  data = returnJSONDict()
+
+  for task in data.get("tasks", []):
+    taskName = ttk.Label(frmTwo, text=task.get("name", "")).grid(pady= 10, padx= 3)
+    taskPriority = ttk.Label(frmTwo, text=task.get("priority", "")).grid()
+    taskStatus = ttk.Label(frmTwo, text=task.get("status", "")).grid()
+
 def taskAdd():
-  print('creates label 1')
-  label = ttk.Label(frmTwo, text=entryValue.get()).grid(padx=10, pady=10)
-  print('creates label 2')
-  labelTwo = ttk.Label(frmTwo, text=taskPriority.get()).grid(padx=10, pady=10)
+  # adds a task to the json file and refreshes the list of tasks
+  appendJSON(entryValue.get(),
+            taskPriority.get(),
+            "")
+  
+  refreshTasks()
 
 def valueReset():
   #resets the fields
@@ -49,9 +67,10 @@ ttk.Label(frm, text=chooseText[1]).grid()
 taskPriority = ttk.Combobox(frm, justify='left', values=comboValues)
 taskPriority.grid()
 
+refreshTasks()
 
 #add
-taskCheck = ttk.Button(frm, text=chooseText[2], command = taskAdd(), state='disabled')
+taskCheck = ttk.Button(frm, text=chooseText[2], command = taskAdd, state='disabled')
 taskCheck.grid(padx=20, pady=20)
 
 #reset

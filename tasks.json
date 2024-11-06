@@ -1,14 +1,16 @@
-[
-  {
-    "id": 1,
-    "name": "Paimti prekes",
-    "priority": "High",
-    "status": "Complete"
-  },
-  {
-    "id": 2,
-    "name": "Suvalgyt bananą",
-    "priority": "Critical",
-    "status": "Incomplete"
-  }
-]
+{
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Paimti prekes",
+      "priority": "High",
+      "status": "Complete"
+    },
+    {
+      "id": 2,
+      "name": "Suvalgyt banana",
+      "priority": "Critical",
+      "status": "Incomplete"
+    }
+  ]
+}
